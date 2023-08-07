@@ -1,0 +1,17 @@
+{
+    "name": "be.eloistree.inputsystemtobool",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InputSystem",
+        "be.eloistree.generaltoolbox"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
