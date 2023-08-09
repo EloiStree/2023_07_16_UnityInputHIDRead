@@ -33,56 +33,14 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
 
     }
 
-    private string CreateExportLog()
+    public string CreateExportLog()
     {
-        StringBuilder sb = new StringBuilder();
-
-        string path = m_deviceSourceRawValue.m_devicePath;
-        sb.AppendLine("# Basic Info");
-        sb.AppendLine("Path: `" + m_deviceSourceRawValue.m_devicePath+ "`  ");
-        sb.AppendLine("Display Name: `" + m_deviceSourceRawValue.m_displayName + "`  ");
-        sb.AppendLine("Product Name: `" + m_deviceSourceRawValue.m_productName + "`  ");
-        sb.AppendLine("Manufacurer: `" + m_deviceSourceRawValue.m_manufacturer + "`  ");
-        sb.AppendLine("Interface: `" + m_deviceSourceRawValue.m_interfacename + "`  ");
-        sb.AppendLine("Buttons count: `" + m_deviceSourceRawValue.m_booleanValue.Count + "`  ");
-        sb.AppendLine("Axis count: `" + m_deviceSourceRawValue.m_axisValue.Count + "`  ");
-
-        sb.AppendLine("##  All Buttons");
-        sb.AppendLine("``` ");
-        sb.AppendLine(string.Join(" ", m_deviceSourceRawValue.m_booleanValue.Select(k => k.m_givenIdName)));
-        sb.AppendLine("``` ");
-        sb.AppendLine("##  All Axis");
-
-        sb.AppendLine("``` ");
-        sb.AppendLine(string.Join(" ", m_deviceSourceRawValue.m_axisValue.Select(k => k.m_givenIdName)) );
-        sb.AppendLine("``` ");
-        sb.AppendLine("##  All Buttons Ref");
-
-        sb.AppendLine("``` ");
-        sb.AppendLine(string.Join("\n", m_deviceSourceRawValue.m_booleanValue.Select(k =>HIDButtonStatic.GetIDPathAndButtonName(path, k.m_givenIdName)).ToArray() ) );
-        sb.AppendLine("``` "); 
-        
-        sb.AppendLine("##  All Axis ref ");
-        sb.AppendLine("``` ");
-        sb.AppendLine(string.Join("\n", m_deviceSourceRawValue.m_axisValue.Select(k => HIDButtonStatic.GetIDPathAndButtonName(path, k.m_givenIdName)).ToArray()) );
-        sb.AppendLine("``` ");
-
-        sb.AppendLine("# Capabilities" );
-        sb.AppendLine("``` json");
-        sb.AppendLine(m_deviceSourceRawValue.m_capabilities + "  ");
-        sb.AppendLine("``` ");
-
-        return sb.ToString();
-
-
-
-
+        return DeviceToLogUtility.CreateExportLog(m_deviceSourceRawValue,true);
     }
 
     public void CopyDeviceInfoInLocalFile()
     {
         string log = CreateExportLog();
-
         m_onCreateLocalFileDebugger.Invoke(log);
     }
 
@@ -130,4 +88,55 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
             }
         }
     }
+}
+
+
+public class DeviceToLogUtility
+{
+
+    public static  string CreateExportLog(DeviceSourceToRawValue rawValue, bool hasJsonCapabilities)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        string path = rawValue.m_devicePath;
+        sb.AppendLine("# Basic Info");
+        sb.AppendLine("Path: `" + rawValue.m_devicePath + "`  ");
+        sb.AppendLine("Display Name: `" + rawValue.m_displayName + "`  ");
+        sb.AppendLine("Product Name: `" + rawValue.m_productName + "`  ");
+        sb.AppendLine("Manufacurer: `" + rawValue.m_manufacturer + "`  ");
+        sb.AppendLine("Interface: `" + rawValue.m_interfacename + "`  ");
+        sb.AppendLine("Buttons count: `" + rawValue.m_booleanValue.Count + "`  ");
+        sb.AppendLine("Axis count: `" + rawValue.m_axisValue.Count + "`  ");
+
+        sb.AppendLine("##  All Buttons");
+        sb.AppendLine("``` ");
+        sb.AppendLine(string.Join(" ", rawValue.m_booleanValue.Select(k => k.m_givenIdName)));
+        sb.AppendLine("``` ");
+        sb.AppendLine("##  All Axis");
+
+        sb.AppendLine("``` ");
+        sb.AppendLine(string.Join(" ", rawValue.m_axisValue.Select(k => k.m_givenIdName)));
+        sb.AppendLine("``` ");
+        sb.AppendLine("##  All Buttons Ref");
+
+        sb.AppendLine("``` ");
+        sb.AppendLine(string.Join("\n", rawValue.m_booleanValue.Select(k => HIDButtonStatic.GetIDPathAndButtonName(path, k.m_givenIdName)).ToArray()));
+        sb.AppendLine("``` ");
+
+        sb.AppendLine("##  All Axis ref ");
+        sb.AppendLine("``` ");
+        sb.AppendLine(string.Join("\n", rawValue.m_axisValue.Select(k => HIDButtonStatic.GetIDPathAndButtonName(path, k.m_givenIdName)).ToArray()));
+        sb.AppendLine("``` ");
+
+        if (hasJsonCapabilities) { 
+            sb.AppendLine("# Capabilities");
+            sb.AppendLine("``` json");
+            sb.AppendLine(rawValue.m_capabilities + "  ");
+            sb.AppendLine("``` ");
+        }
+
+        return sb.ToString();
+    }
+
+
 }

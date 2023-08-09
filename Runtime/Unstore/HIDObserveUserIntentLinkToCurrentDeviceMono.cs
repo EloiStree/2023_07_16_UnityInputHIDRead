@@ -21,6 +21,49 @@ public class HIDObserveUserIntentLinkToCurrentDeviceMono : MonoBehaviour
         m_buttonDico.Clear();
         m_axisDico.Clear();
 
+
+        
+
+        foreach (var item in m_userIntent.m_buttonDirectUniqueId)
+        {
+            string id = item.m_uniqueID;
+            HIDButtonStatic.SplitUniqueId(item.m_uniqueID,
+                out string path,
+                out string button);
+
+            HIDRef_DeviceButtonUniqueID buttonTrack = new HIDRef_DeviceButtonUniqueID();
+            buttonTrack.m_uniqueID = id;
+            buttonTrack.m_booleanName = item.m_booleanName;
+            buttonTrack.m_buttonObserver = new Intent_ObserverHIDButton() {
+                m_buttonName = button,
+                m_trueIfPressed= item.m_buttonObserved.m_trueIfPressed
+            };
+            if (!m_buttonDico.ContainsKey(id))
+                m_buttonDico.Add(id, new List<HIDRef_DeviceButtonUniqueID>());
+            m_buttonDico[id].Add(buttonTrack);
+        }
+        foreach (var item in m_userIntent.m_axisDirectUniqueId)
+        {
+            string id = item.m_uniqueID;
+            HIDButtonStatic.SplitUniqueId(item.m_uniqueID,
+                out string path,
+                out string button);
+
+            HIDRef_DeviceAxisUniqueID buttonTrack = new HIDRef_DeviceAxisUniqueID();
+            buttonTrack.m_uniqueID = id;
+            buttonTrack.m_booleanName = item.m_booleanName;
+            buttonTrack.m_axisObserver = new Intent_ObserverHIDAxis() {
+                m_axisName = button,
+                m_inverse = item.m_axisObserved.m_inverse,
+                m_betweenMin = item.m_axisObserved.m_betweenMin,
+                m_betweenMax = item.m_axisObserved.m_betweenMax
+            };
+            if (!m_axisDico.ContainsKey(id))
+                m_axisDico.Add(id, new List<HIDRef_DeviceAxisUniqueID>());
+            m_axisDico[id].Add(buttonTrack);
+        }
+
+
         //c;
         foreach (var item in m_userIntent.m_searchPathDeviceButton)
         {
@@ -94,8 +137,8 @@ public class HIDObserveUserIntentLinkToCurrentDeviceMono : MonoBehaviour
         }
     }
 
-    private void GetDeviceToObserver(HIDSearchPattern_LookAroundWithIndex m_deviceToObserver, out DeviceSourceToRawValue[] devicesFound)
-    {
-        throw new NotImplementedException();
-    }
+    //private void GetDeviceToObserver(HIDSearchPattern_LookAroundWithIndex m_deviceToObserver, out DeviceSourceToRawValue[] devicesFound)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

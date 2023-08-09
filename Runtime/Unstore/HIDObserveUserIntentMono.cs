@@ -10,10 +10,55 @@ public class HIDObserveUserIntentMono : MonoBehaviour
     public List<HIDSearch_AnyDeviceAxis>                m_searchAnyDeviceAxis = new List<HIDSearch_AnyDeviceAxis>();
     public List<HIDSearch_ObserveAllButtonsFromIndex>   m_searchOneDeviceAllButtons = new List<HIDSearch_ObserveAllButtonsFromIndex>();
 
-    public List<HIDRef_DeviceButtonUniqueID> m_buttonFromUniqueId = new List<HIDRef_DeviceButtonUniqueID>();
-    public List<HIDRef_DeviceAxisUniqueID> m_axisFromUniqueId = new List<HIDRef_DeviceAxisUniqueID>();
     public List<HIDSearch_ObserveAllButtonsFromPath> m_allButtonsFromPath = new List<HIDSearch_ObserveAllButtonsFromPath>();
 
+    public List<HIDRef_DeviceButtonUniqueID> m_buttonFromUniqueId = new List<HIDRef_DeviceButtonUniqueID>();
+    public List<HIDRef_DeviceAxisUniqueID> m_axisFromUniqueId = new List<HIDRef_DeviceAxisUniqueID>();
+    public List<HIDRef_DeviceButtonDirectUniqueID> m_buttonDirectUniqueId = new List<HIDRef_DeviceButtonDirectUniqueID>();
+    public List<HIDRef_DeviceAxisDirectUniqueID>   m_axisDirectUniqueId = new List<HIDRef_DeviceAxisDirectUniqueID>();
+
+}
+
+
+[System.Serializable]
+public class Intent_BooleanObserved
+{
+
+    public bool m_trueIfPressed = true;
+
+}
+
+[System.Serializable]
+public class Intent_AxisObserved
+{
+    public float m_betweenMin;
+    public float m_betweenMax;
+    public bool m_inverse = false;
+
+    public void CheckMinMax()
+    {
+        if (m_betweenMax < m_betweenMin)
+        {
+            float d = m_betweenMin;
+            m_betweenMin = m_betweenMax;
+            m_betweenMax = d;
+        }
+    }
+}
+[System.Serializable]
+public class HIDRef_DeviceButtonDirectUniqueID
+{
+    public string m_uniqueID;
+    public string m_booleanName;
+    public Intent_BooleanObserved m_buttonObserved;
+}
+
+[System.Serializable]
+public class HIDRef_DeviceAxisDirectUniqueID
+{
+    public string m_uniqueID;
+    public string m_booleanName;
+    public Intent_AxisObserved m_axisObserved;
 }
 
 

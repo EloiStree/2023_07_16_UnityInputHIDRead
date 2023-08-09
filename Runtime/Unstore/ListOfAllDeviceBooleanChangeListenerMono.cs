@@ -170,4 +170,15 @@ public class HIDButtonStatic {
     {
         return devicePath + "|>" + buttonName;
     }
+
+    internal static void SplitUniqueId(string uniqueID, out string path, out string button)
+    {
+        path = "";
+        button = "";
+        string [] token = uniqueID.Split("|>");
+        if (token.Length > 0)
+            path = token[0];
+        if (token.Length > 1)
+            button = token[1];
+    }
 } 
