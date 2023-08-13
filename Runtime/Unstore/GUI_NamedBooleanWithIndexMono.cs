@@ -10,6 +10,7 @@ public class GUI_NamedBooleanWithIndexMono : MonoBehaviour
     public string m_label;
     public bool m_isTrue;
     public bool m_isDisplay;
+    
 
     public Eloi.PrimitiveUnityEvent_Int m_onIndex;
     public Eloi.PrimitiveUnityEvent_String m_onLabel;

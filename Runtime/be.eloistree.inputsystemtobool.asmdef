@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "Unity.InputSystem",
-        "be.eloistree.generaltoolbox"
+        "be.eloistree.generaltoolbox",
+        "be.eloistree.shogitileline"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

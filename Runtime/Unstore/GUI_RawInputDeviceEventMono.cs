@@ -21,21 +21,23 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
 
     public GUI_NamedBooleanWithIndexMono [] m_booleanGUI;
     public GUI_NamedAxisWithIndexMono [] m_axisGUI;
-    public Eloi.PrimitiveUnityEvent_String m_onCreateClipboarDebugger;
+    public bool m_useJsonCapacityInLog=true;
+    public Eloi.PrimitiveUnityEvent_String m_onCreateClipboardDebugger;
     public Eloi.PrimitiveUnityEvent_String m_onCreateLocalFileDebugger;
+
 
 
 
     public void CopyDeviceInfoInClipboard()
     {
-        string log = CreateExportLog();
-        m_onCreateClipboarDebugger.Invoke(log);
+        string log = CreateExportLog(m_useJsonCapacityInLog);
+        m_onCreateClipboardDebugger.Invoke(log);
 
     }
 
-    public string CreateExportLog()
+    public string CreateExportLog( bool useJsonCapacityInLog =true)
     {
-        return DeviceToLogUtility.CreateExportLog(m_deviceSourceRawValue,true);
+        return DeviceToLogUtility.CreateExportLog(m_deviceSourceRawValue, useJsonCapacityInLog);
     }
 
     public void CopyDeviceInfoInLocalFile()
@@ -67,12 +69,22 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
             {
                 m_booleanGUI[i].SetAsDisplay(true);
                 m_booleanGUI[i].Set(i, m_deviceSourceRawValue.m_booleanValue[i].m_givenIdName, m_deviceSourceRawValue.m_booleanValue[i].m_value);
+                GUI_HIDPathUniqueIDMono uniqueId = m_booleanGUI[i].GetComponent<GUI_HIDPathUniqueIDMono>();
+                if (uniqueId != null)
+                {
+                    string p = HIDButtonStatic.GetIDPathAndButtonName(
+                         m_deviceSourceRawValue.m_devicePath,
+                         m_deviceSourceRawValue.m_booleanValue[i].m_givenIdName
+                         );
+                    uniqueId.SetUniquePathId(p);
+                }
             }
             else
             {
                 m_booleanGUI[i].SetAsDisplay(false);
                 m_booleanGUI[i].Clear();
             }
+            
         }
         for (int i = 0; i < m_axisGUI.Length; i++)
         {
@@ -80,12 +92,22 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
             {
                 m_axisGUI[i].SetAsDisplay(true);
                 m_axisGUI[i].Set(i, m_deviceSourceRawValue.m_axisValue[i].m_givenIdName, m_deviceSourceRawValue.m_axisValue[i].m_value);
+                GUI_HIDPathUniqueIDMono uniqueId = m_axisGUI[i].GetComponent<GUI_HIDPathUniqueIDMono>();
+                if (uniqueId != null)
+                {
+                   string p= HIDButtonStatic.GetIDPathAndButtonName(
+                        m_deviceSourceRawValue.m_devicePath,
+                        m_deviceSourceRawValue.m_axisValue[i].m_givenIdName
+                        );
+                    uniqueId.SetUniquePathId(p);
+                }
             }
             else
             {
                 m_axisGUI[i].SetAsDisplay(false);
                 m_axisGUI[i].Clear();
             }
+           
         }
     }
 }

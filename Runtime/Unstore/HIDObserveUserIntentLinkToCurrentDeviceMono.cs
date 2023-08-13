@@ -36,7 +36,7 @@ public class HIDObserveUserIntentLinkToCurrentDeviceMono : MonoBehaviour
             buttonTrack.m_booleanName = item.m_booleanName;
             buttonTrack.m_buttonObserver = new Intent_ObserverHIDButton() {
                 m_buttonName = button,
-                m_trueIfPressed= item.m_buttonObserved.m_trueIfPressed
+                m_trueIfPressed= item.m_buttonObserved.m_valueIsTrue
             };
             if (!m_buttonDico.ContainsKey(id))
                 m_buttonDico.Add(id, new List<HIDRef_DeviceButtonUniqueID>());

@@ -11,7 +11,7 @@ public class StringToFileTempMono : MonoBehaviour
 
             Eloi.E_FileAndFolderUtility.CreateFolderIfNotThere(m_whereToCreateFile);
             Eloi.E_FileAndFolderUtility.ExportByOverriding(m_whereToCreateFile, text);
-            Debug.Log("SAVE FULL LOG:"+ m_whereToCreateFile.GetPath());
+           // Debug.Log("SAVE FULL LOG:"+ m_whereToCreateFile.GetPath());
         }
     }
 }

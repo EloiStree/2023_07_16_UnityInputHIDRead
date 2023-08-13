@@ -144,13 +144,13 @@ public class HIDAxisChangedReference
 {
     public string m_uniqueId;
     public DeviceSourceToRawValue m_deviceInfo;
-    public DeviceSourceToRawValue.NamedFloatValue m_axiThatChanged;
+    public DeviceSourceToRawValue.NamedFloatValue m_axisThatChanged;
 
     public HIDAxisChangedReference(in DeviceSourceToRawValue deviceInfo, in DeviceSourceToRawValue.NamedFloatValue axisThatChanged)
     {
         m_uniqueId = HIDButtonStatic.GetID(in deviceInfo, in axisThatChanged);
         m_deviceInfo = deviceInfo;
-        m_axiThatChanged = axisThatChanged;
+        m_axisThatChanged = axisThatChanged;
     }
 }
 
