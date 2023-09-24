@@ -34,7 +34,31 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
         }
     }
 
-  
+    public void IsButtonTrueFromPathNameId(string button, out bool buttonFound, out bool isButtonTrue)
+    {
+        GetButtonFromPathNameId(button, out buttonFound, out HIDButtonChangedReference r);
+        if(buttonFound && r !=null)
+            isButtonTrue = r.m_booleanThatChanged.m_value;
+        else 
+            isButtonTrue = false;
+
+    }
+
+    public void IsAxisTrueFromPathNameId(string axis, float minAxis, float maxAxis, out bool axisFound, out bool isBetweenAxis)
+    {
+        if (minAxis > maxAxis)
+        {
+            float t = minAxis;
+            minAxis = maxAxis;
+            maxAxis = t;
+        }
+        GetAxisFromPathNameId(axis, out axisFound, out HIDAxisChangedReference r);
+        if (axisFound && r != null)
+            isBetweenAxis = r.m_axisThatChanged.m_value >= minAxis && r.m_axisThatChanged.m_value <= maxAxis;
+        else 
+            isBetweenAxis = false;
+    }
+
     public void CheckIfExistsAndRemoveFromPath(string[]  device)
     {
         foreach (var path in device)
@@ -93,6 +117,9 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
     }
 
     public Dictionary<string, HIDButtonChangedReference> m_buttonRef = new Dictionary<string, HIDButtonChangedReference>();
+    public Dictionary<string, HIDButtonChangedReference> m_buttonRefByDisplayName = new Dictionary<string, HIDButtonChangedReference>();
+    public Dictionary<string, HIDButtonChangedReference> m_buttonRefByProductName = new Dictionary<string, HIDButtonChangedReference>();
+    public Dictionary<string, HIDButtonChangedReference> m_buttonRefByManufactorName = new Dictionary<string, HIDButtonChangedReference>();
 
     public void GetDeviceInfoFromPath(string devicePath, out bool found, out DeviceSourceToRawValue device)
     {
@@ -111,6 +138,10 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
     }
 
     public Dictionary<string, HIDAxisChangedReference> m_axisRef = new Dictionary<string, HIDAxisChangedReference>();
+    public Dictionary<string, HIDAxisChangedReference> m_axisRefByDisplayName = new Dictionary<string, HIDAxisChangedReference>();
+    public Dictionary<string, HIDAxisChangedReference> m_axisRefByProductName = new Dictionary<string, HIDAxisChangedReference>();
+    public Dictionary<string, HIDAxisChangedReference> m_axisRefByManufactorName = new Dictionary<string, HIDAxisChangedReference>();
+
 
 
     public void GetButtonFromPathNameId(string path, string axisName, out bool found, out HIDButtonChangedReference buttonRef)
@@ -119,15 +150,51 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
     }
     public void GetButtonFromPathNameId(string pathNamedId, out bool found, out HIDButtonChangedReference buttonRef )
     {
-        if (m_buttonRef.ContainsKey(pathNamedId))
-        {
-            found = true;
-            buttonRef = m_buttonRef[pathNamedId];
-        }
-        else {
+        if (pathNamedId.Length < 1) {
             found = false;
             buttonRef = null;
+            return;
         }
+            
+        if (pathNamedId[0] == 'p' || pathNamedId[0] == 'P')
+        {
+           pathNamedId = "P" + pathNamedId.Substring(1);
+            if (m_buttonRefByProductName.ContainsKey(pathNamedId))
+            {
+                found = true;
+                buttonRef = m_buttonRefByProductName[pathNamedId];
+                return;
+            }
+            
+        }
+        else if (pathNamedId[0] == 'd' || pathNamedId[0] == 'D')
+        {
+            pathNamedId = "D" + pathNamedId.Substring(1);
+            if (m_buttonRefByDisplayName.ContainsKey(pathNamedId))
+            {
+                found = true;
+                buttonRef = m_buttonRefByDisplayName[pathNamedId];
+                return;
+            }
+        }
+        else { 
+
+            if (m_buttonRef.ContainsKey(pathNamedId))
+            {
+                found = true;
+                buttonRef = m_buttonRef[pathNamedId]; 
+                return;
+
+            }
+            else {
+                found = false;
+                buttonRef = null;
+                return;
+
+            }
+        }
+        found = false;
+        buttonRef = null;
     }
 
     public int m_totalButton;
@@ -141,16 +208,58 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
     }
         public void GetAxisFromPathNameId(string pathNamedId, out bool found, out HIDAxisChangedReference buttonRef)
     {
-        if (m_axisRef.ContainsKey(pathNamedId))
-        {
-            found = true;
-            buttonRef = m_axisRef[pathNamedId];
-        }
-        else
+        if (pathNamedId.Length < 1)
         {
             found = false;
             buttonRef = null;
+            return;
         }
+
+        if (pathNamedId[0] == 'p' || pathNamedId[0] == 'P')
+        {
+            //Debug.Log("Test P:" + pathNamedId);
+            //Debug.Log(string.Join("\n", m_axisRefByProductName.Keys));
+            pathNamedId = "P" + pathNamedId.Substring(1);
+            if (m_axisRefByProductName.ContainsKey(pathNamedId))
+            {
+                found = true;
+                buttonRef = m_axisRefByProductName[pathNamedId];
+                return;
+            }
+
+        }
+        else if (pathNamedId[0] == 'd' || pathNamedId[0] == 'D')
+        {
+            pathNamedId = "D" + pathNamedId.Substring(1);
+            //Debug.Log("Test D:" + pathNamedId);
+            //Debug.Log(string.Join("\n", m_axisRefByDisplayName.Keys));
+            if (m_axisRefByDisplayName.ContainsKey(pathNamedId))
+            {
+                found = true;
+                buttonRef = m_axisRefByDisplayName[pathNamedId];
+                return;
+            }
+        }
+        else
+        {
+
+            if (m_axisRef.ContainsKey(pathNamedId))
+            {
+                found = true;
+                buttonRef = m_axisRef[pathNamedId];
+                return;
+
+            }
+            else
+            {
+                found = false;
+                buttonRef = null;
+                return;
+
+            }
+        }
+        found = false;
+        buttonRef = null;
 
     }
 
@@ -158,18 +267,45 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
     public void RefreshUniqueIdPointers()
     {
         m_buttonRef.Clear();
+        m_buttonRefByDisplayName.Clear();
+        m_buttonRefByProductName.Clear();
+        m_buttonRefByManufactorName.Clear();
         m_axisRef.Clear();
+        m_axisRefByDisplayName.Clear();
+        m_axisRefByProductName.Clear();
+        m_axisRefByManufactorName.Clear();
         foreach (var item in m_devicesId)
         {
             foreach (var c in item.m_booleanValue)
             {
                 string id = HIDButtonStatic.GetID(in item, in c);
-                m_buttonRef.Add(id, new HIDButtonChangedReference(item, c));
+                HIDButtonChangedReference button = new HIDButtonChangedReference(item, c);
+                m_buttonRef.Add(id, button);
+                HIDButtonStatic.GetDisplayPathOf(button, out string dPath);
+                HIDButtonStatic.GetProductPathOf(button, out string pPath);
+                HIDButtonStatic.GetManufactorPathOf(button, out string mPath);
+                if (!m_buttonRefByDisplayName.ContainsKey(dPath))
+                    m_buttonRefByDisplayName.Add(dPath, button);
+                if (!m_buttonRefByProductName.ContainsKey(pPath))
+                    m_buttonRefByProductName.Add(pPath, button);
+                if (!m_buttonRefByManufactorName.ContainsKey(mPath))
+                    m_buttonRefByManufactorName.Add(mPath, button);
             }
             foreach (var c in item.m_axisValue)
             {
                 string id = HIDButtonStatic.GetID(in item, in c);
-                m_axisRef.Add(id, new HIDAxisChangedReference(item, c));
+                HIDAxisChangedReference axis = new HIDAxisChangedReference(item, c);
+                m_axisRef.Add(id,axis);
+                HIDButtonStatic.GetDisplayPathOf(axis, out string dPath);
+                HIDButtonStatic.GetProductPathOf(axis, out string pPath);
+                HIDButtonStatic.GetManufactorPathOf(axis, out string mPath);
+                Eloi.E_CodeTag.SideEffectCode.Info("If two device have the same display name it create more complex code but don't want to make the path complicated for device are solo used.");
+                if(!m_axisRefByDisplayName.ContainsKey(dPath) )
+                m_axisRefByDisplayName.Add(dPath, axis);
+                if (!m_axisRefByProductName.ContainsKey(pPath))
+                    m_axisRefByProductName.Add(pPath, axis);
+                if (!m_axisRefByManufactorName.ContainsKey(mPath))
+                    m_axisRefByManufactorName.Add(mPath, axis);
             }
         }
         GetButtonTotalCount(out m_totalButton);

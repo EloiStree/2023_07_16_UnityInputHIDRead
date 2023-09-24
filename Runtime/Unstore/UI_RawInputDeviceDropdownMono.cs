@@ -50,13 +50,13 @@ public class UI_RawInputDeviceDropdownMono : MonoBehaviour
 
     public void Decrease()
     {
-        if (m_index > 1)
+        if (m_index > 0)
             m_index--;
         SelectFromDropDown(m_index);
     }
     public void Increase()
     {
-        if (m_index < m_source.m_devicesId.Count-1)
+        if (m_index < m_source.m_devicesId.Count)
             m_index++;
         SelectFromDropDown(m_index);
     }

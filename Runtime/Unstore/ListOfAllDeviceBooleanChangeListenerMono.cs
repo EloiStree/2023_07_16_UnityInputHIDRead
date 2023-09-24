@@ -160,9 +160,9 @@ public class HIDButtonStatic {
     {
         return device.m_devicePath + "|>" + booleanThatChanged.m_givenIdName;
     }
-    public static string GetID(in DeviceSourceToRawValue device, in DeviceSourceToRawValue.NamedFloatValue booleanThatChanged)
+    public static string GetID(in DeviceSourceToRawValue device, in DeviceSourceToRawValue.NamedFloatValue floatThatChanged)
     {
-        return device.m_devicePath + "|>" + booleanThatChanged.m_givenIdName;
+        return device.m_devicePath + "|>" + floatThatChanged.m_givenIdName;
     }
 
     public static string GetIDPathAndButtonName(
@@ -171,7 +171,12 @@ public class HIDButtonStatic {
         return devicePath + "|>" + buttonName;
     }
 
-    internal static void SplitUniqueId(string uniqueID, out string path, out string button)
+    internal static void ExtractInfoPathFromIDPath(string pathNamedId, out bool valide, out char infoChar, out string infoTarget, out string buttonOrAxis)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static void SplitUniqueId(string uniqueID, out string path, out string button)
     {
         path = "";
         button = "";
@@ -180,5 +185,39 @@ public class HIDButtonStatic {
             path = token[0];
         if (token.Length > 1)
             button = token[1];
+    }
+
+    public static void GetDisplayPathOf(HIDAxisChangedReference axis, out string dPath)
+    {
+        dPath = "D/" + axis.m_deviceInfo.m_displayName + "|>" + axis.m_axisThatChanged.m_givenIdName;
+    }
+    public static void GetDisplayPathOf(HIDButtonChangedReference button, out string dPath)
+    {
+        dPath = "D/" + button.m_deviceInfo.m_displayName + "|>" + button.m_booleanThatChanged.m_givenIdName;
+    }
+
+    public static void GetProductPathOf(HIDAxisChangedReference axis, out string pPath)
+    {
+        pPath = "P/" + axis.m_deviceInfo.m_productName + "|>" + axis.m_axisThatChanged.m_givenIdName;
+    }
+
+    public static void GetProductPathOf(HIDButtonChangedReference button, out string pPath)
+    {
+        pPath = "P/" + button.m_deviceInfo.m_productName + "|>" + button.m_booleanThatChanged.m_givenIdName;
+    }
+
+    public static void GetManufactorPathOf(HIDAxisChangedReference axis, out string mPath)
+    {
+        mPath = "M/" + axis.m_deviceInfo.m_manufacturer + "|>" + axis.m_axisThatChanged.m_givenIdName;
+    }
+
+    public static void GetManufactorPathOf(HIDButtonChangedReference button, out string mPath)
+    {
+        mPath = "M/" + button.m_deviceInfo.m_manufacturer + "|>" + button.m_booleanThatChanged.m_givenIdName;
+    }
+
+    public static string BuildPathOf(string pathTypeAsLetter, string target, string buttonOrAxisName)
+    {
+        return pathTypeAsLetter+"/" + target + "|>" + buttonOrAxisName;
     }
 } 

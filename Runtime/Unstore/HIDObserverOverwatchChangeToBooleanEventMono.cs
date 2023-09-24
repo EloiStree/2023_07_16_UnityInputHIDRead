@@ -15,16 +15,47 @@ public class HIDObserverOverwatchChangeToBooleanEventMono : MonoBehaviour
 
     }
 
-    public void NotificationOfButtonChanged(HIDButtonChangedReference button) {
-        if (m_overwatchValue.m_buttonDico.ContainsKey(button.m_uniqueId)) {
+    public void NotificationOfButtonChanged(HIDButtonChangedReference button)
+    {
 
-            bool value = button.m_booleanThatChanged.m_value;
-            foreach (var item in m_overwatchValue.m_buttonDico[button.m_uniqueId])
-            {
-                Notify(item.m_booleanName, item.m_buttonObserver.m_trueIfPressed ? value : !value);
-            }
+        string path = button.m_uniqueId;
+        bool pushed = false;
+        pushed = TryToPushFromPath(button, path);
+        if (pushed) return;
+
+        HIDButtonStatic.GetProductPathOf(button, out path);
+        pushed = TryToPushFromPath(button, path);
+        if (pushed) return;
+
+        HIDButtonStatic.GetDisplayPathOf(button, out path);
+        pushed = TryToPushFromPath(button, path);
+        if (pushed) return;
+
+        HIDButtonStatic.GetManufactorPathOf(button, out path);
+        pushed = TryToPushFromPath(button, path);
+        if (pushed) return;
+    }
+
+    private bool TryToPushFromPath(HIDButtonChangedReference button, string path)
+    {
+        if (m_overwatchValue.m_buttonDico.ContainsKey(path))
+        {
+            List<HIDRef_DeviceButtonUniqueID> obsever = m_overwatchValue.m_buttonDico[path];
+            Notify(button, obsever);    
+            return true;
+        }
+        return false;
+    }
+
+    private void Notify(HIDButtonChangedReference button, List<HIDRef_DeviceButtonUniqueID> obsever)
+    {
+        bool value = button.m_booleanThatChanged.m_value;
+        foreach (var item in obsever)
+        {
+            Notify(item.m_booleanName, item.m_buttonObserver.m_trueIfPressed ? value : !value);
         }
     }
+
 
     public bool m_useDebugLog;
     private void Notify(string booleanName, bool newValue)

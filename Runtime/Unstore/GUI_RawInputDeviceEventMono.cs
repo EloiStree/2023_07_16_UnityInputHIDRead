@@ -57,9 +57,6 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
         m_onDevicePath.Invoke(rawValue.m_devicePath);
         m_onDeviceButtonCount.Invoke(rawValue.m_booleanValue.Count);
         m_onDeviceAxisCount.Invoke(rawValue.m_axisValue.Count);
-
-       
-
     }
     private void Update()
     {
@@ -78,6 +75,22 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
                          );
                     uniqueId.SetUniquePathId(p);
                 }
+                GUI_HIDPathMPDUniqueIDMono uniqueIdMPD = m_booleanGUI[i].GetComponent<GUI_HIDPathMPDUniqueIDMono>();
+                if (uniqueIdMPD != null)
+                {
+                    uniqueIdMPD.SetUniquePathIdManufactor(HIDButtonStatic.BuildPathOf("M",
+                         m_deviceSourceRawValue.m_manufacturer,
+                         m_deviceSourceRawValue.m_booleanValue[i].m_givenIdName
+                         ));
+                    uniqueIdMPD.SetUniquePathIdProduct(HIDButtonStatic.BuildPathOf("P",
+                        m_deviceSourceRawValue.m_productName,
+                        m_deviceSourceRawValue.m_booleanValue[i].m_givenIdName
+                        ));
+                    uniqueIdMPD.SetUniquePathIdDisplay(HIDButtonStatic.BuildPathOf("D",
+                        m_deviceSourceRawValue.m_displayName,
+                        m_deviceSourceRawValue.m_booleanValue[i].m_givenIdName
+                        ));
+                }
             }
             else
             {
@@ -95,11 +108,27 @@ public class GUI_RawInputDeviceEventMono : MonoBehaviour
                 GUI_HIDPathUniqueIDMono uniqueId = m_axisGUI[i].GetComponent<GUI_HIDPathUniqueIDMono>();
                 if (uniqueId != null)
                 {
-                   string p= HIDButtonStatic.GetIDPathAndButtonName(
-                        m_deviceSourceRawValue.m_devicePath,
-                        m_deviceSourceRawValue.m_axisValue[i].m_givenIdName
-                        );
+                    string p = HIDButtonStatic.GetIDPathAndButtonName(
+                         m_deviceSourceRawValue.m_devicePath,
+                         m_deviceSourceRawValue.m_axisValue[i].m_givenIdName
+                         );
                     uniqueId.SetUniquePathId(p);
+                }
+                GUI_HIDPathMPDUniqueIDMono uniqueIdMPD = m_axisGUI[i].GetComponent<GUI_HIDPathMPDUniqueIDMono>();
+                if (uniqueIdMPD != null)
+                {
+                    uniqueIdMPD.SetUniquePathIdManufactor(HIDButtonStatic.BuildPathOf("M",
+                         m_deviceSourceRawValue.m_manufacturer,
+                         m_deviceSourceRawValue.m_axisValue[i].m_givenIdName
+                         ));
+                    uniqueIdMPD.SetUniquePathIdProduct(HIDButtonStatic.BuildPathOf("P",
+                        m_deviceSourceRawValue.m_productName,
+                        m_deviceSourceRawValue.m_axisValue[i].m_givenIdName
+                        ));
+                    uniqueIdMPD.SetUniquePathIdDisplay(HIDButtonStatic.BuildPathOf("D",
+                        m_deviceSourceRawValue.m_displayName,
+                        m_deviceSourceRawValue.m_axisValue[i].m_givenIdName
+                        ));
                 }
             }
             else
