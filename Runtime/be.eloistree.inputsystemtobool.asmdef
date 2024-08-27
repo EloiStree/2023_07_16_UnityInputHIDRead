@@ -4,7 +4,8 @@
     "references": [
         "Unity.InputSystem",
         "be.eloistree.generaltoolbox",
-        "be.eloistree.shogitileline"
+        "be.eloistree.shogitileline",
+        "be.elab.clamphistory"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
