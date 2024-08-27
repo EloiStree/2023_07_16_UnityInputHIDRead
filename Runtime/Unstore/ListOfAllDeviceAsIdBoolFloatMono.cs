@@ -123,7 +123,7 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
 
     public void GetDeviceInfoFromPath(string devicePath, out bool found, out DeviceSourceToRawValue device)
     {
-        Eloi.E_CodeTag.DirtyCode.Info("Won't work if use threads. Need dico but I am a bit sleepy.");
+        //Eloi.E_CodeTag.DirtyCode.Info("Won't work if use threads. Need dico but I am a bit sleepy.");
         foreach (var item in m_devicesId)
         {
             if (item.m_devicePath == devicePath)
@@ -299,7 +299,7 @@ public class ListOfAllDeviceAsIdBoolFloatMono : MonoBehaviour
                 HIDButtonStatic.GetDisplayPathOf(axis, out string dPath);
                 HIDButtonStatic.GetProductPathOf(axis, out string pPath);
                 HIDButtonStatic.GetManufactorPathOf(axis, out string mPath);
-                Eloi.E_CodeTag.SideEffectCode.Info("If two device have the same display name it create more complex code but don't want to make the path complicated for device are solo used.");
+                //Eloi.E_CodeTag.SideEffectCode.Info("If two device have the same display name it create more complex code but don't want to make the path complicated for device are solo used.");
                 if(!m_axisRefByDisplayName.ContainsKey(dPath) )
                 m_axisRefByDisplayName.Add(dPath, axis);
                 if (!m_axisRefByProductName.ContainsKey(pPath))
