@@ -5,7 +5,9 @@
         "Unity.InputSystem",
         "be.eloistree.generaltoolbox",
         "be.eloistree.shogitileline",
-        "be.elab.clamphistory"
+        "be.elab.clamphistory",
+        "be.elab.newoldoflist",
+        "be.elab.boolevent"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
