@@ -1,10 +1,10 @@
 {
-    "name": "be.eloistree.inputsystemtobool",
+    "name": "be.elab.inputsystemtobool",
     "rootNamespace": "",
     "references": [
         "Unity.InputSystem",
-        "be.eloistree.generaltoolbox",
-        "be.eloistree.shogitileline",
+        "be.elab.generaltoolbox",
+        "be.elab.shogitileline",
         "be.elab.clamphistory",
         "be.elab.newoldoflist",
         "be.elab.boolevent"
