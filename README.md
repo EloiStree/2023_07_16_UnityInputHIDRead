@@ -1,4 +1,4 @@
-# Will be deleted and replaced by https://github.com/EloiStree/2024_08_27_UnityInputHidStringIdHub
+Will be deleted and replaced by https://github.com/EloiStree/2024_08_27_UnityInputHidStringIdHub
 
 ---------
 
